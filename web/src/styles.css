@@ -1,0 +1,11 @@
+/* The designer brings its own styles — they are compiled into the package, not
+   a stylesheet you have to remember to import. This is only the page around it. */
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  color: #111827;
+  background: #f4f5f7;
+}

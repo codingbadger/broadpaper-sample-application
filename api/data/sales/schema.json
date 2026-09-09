@@ -1,0 +1,107 @@
+[
+  {
+    "id": "company",
+    "label": "Company",
+    "icon": "building",
+    "schema": {
+      "name": { "type": "string", "label": "Company name" },
+      "email": { "type": "string", "label": "Email" },
+      "phone": { "type": "string", "label": "Phone" },
+      "vatNumber": { "type": "string", "label": "VAT number" },
+      "address": {
+        "type": "object",
+        "label": "Address",
+        "fields": {
+          "line1": { "type": "string", "label": "Line 1" },
+          "city": { "type": "string", "label": "City" },
+          "postcode": { "type": "string", "label": "Postcode" }
+        }
+      }
+    }
+  },
+  {
+    "id": "customer",
+    "label": "Customer",
+    "icon": "user",
+    "schema": {
+      "name": { "type": "string", "label": "Customer name" },
+      "reference": { "type": "string", "label": "Account reference" },
+      "contact": { "type": "string", "label": "Contact" },
+      "email": { "type": "string", "label": "Email" },
+      "since": { "type": "date", "label": "Customer since" },
+      "address": {
+        "type": "object",
+        "label": "Address",
+        "fields": {
+          "line1": { "type": "string", "label": "Line 1" },
+          "city": { "type": "string", "label": "City" },
+          "postcode": { "type": "string", "label": "Postcode" }
+        }
+      }
+    }
+  },
+  {
+    "id": "report",
+    "label": "Report",
+    "schema": {
+      "title": { "type": "string", "label": "Title" },
+      "period": { "type": "string", "label": "Period" },
+      "periodStart": { "type": "date", "label": "Period start" },
+      "periodEnd": { "type": "date", "label": "Period end" },
+      "preparedBy": { "type": "string", "label": "Prepared by" },
+      "summary": { "type": "string", "label": "Summary" }
+    }
+  },
+  {
+    "id": "sales",
+    "label": "Sales",
+    "icon": "chart",
+    "schema": {
+      "total": { "type": "currency", "label": "Total sales", "currency": "GBP" },
+      "orderCount": { "type": "number", "label": "Orders" },
+      "averageOrder": { "type": "currency", "label": "Average order", "currency": "GBP" },
+      "growthPct": { "type": "percent", "label": "Growth on last period" },
+      "targetPct": { "type": "percent", "label": "Against target" },
+      "orders": {
+        "type": "array",
+        "label": "Orders",
+        "itemSchema": {
+          "type": "object",
+          "fields": {
+            "date": { "type": "date", "label": "Date" },
+            "reference": { "type": "string", "label": "Reference" },
+            "description": { "type": "string", "label": "Description" },
+            "category": { "type": "string", "label": "Category" },
+            "quantity": { "type": "number", "label": "Quantity" },
+            "unitPrice": { "type": "currency", "label": "Unit price", "currency": "GBP" },
+            "total": { "type": "currency", "label": "Total", "currency": "GBP" }
+          }
+        }
+      },
+      "byCategory": {
+        "type": "array",
+        "label": "By category",
+        "itemSchema": {
+          "type": "object",
+          "fields": {
+            "category": { "type": "string", "label": "Category" },
+            "total": { "type": "currency", "label": "Total", "currency": "GBP" },
+            "share": { "type": "percent", "label": "Share" }
+          }
+        }
+      },
+      "byMonth": {
+        "type": "array",
+        "label": "By month",
+        "itemSchema": {
+          "type": "object",
+          "fields": {
+            "month": { "type": "string", "label": "Month" },
+            "total": { "type": "currency", "label": "Sales", "currency": "GBP" },
+            "target": { "type": "currency", "label": "Target", "currency": "GBP" }
+          }
+        }
+      }
+    }
+  }
+]

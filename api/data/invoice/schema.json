@@ -1,0 +1,114 @@
+[
+  {
+    "id": "issuer",
+    "label": "From",
+    "icon": "building",
+    "schema": {
+      "name": { "type": "string", "label": "Trading name" },
+      "legalName": { "type": "string", "label": "Legal name" },
+      "email": { "type": "string", "label": "Email" },
+      "phone": { "type": "string", "label": "Phone" },
+      "vatNumber": { "type": "string", "label": "VAT number" },
+      "companyNumber": { "type": "string", "label": "Company number" },
+      "address": {
+        "type": "object",
+        "label": "Address",
+        "fields": {
+          "line1": { "type": "string", "label": "Line 1" },
+          "city": { "type": "string", "label": "City" },
+          "postcode": { "type": "string", "label": "Postcode" },
+          "country": { "type": "string", "label": "Country" }
+        }
+      },
+      "bank": {
+        "type": "object",
+        "label": "Bank details",
+        "fields": {
+          "name": { "type": "string", "label": "Bank" },
+          "accountName": { "type": "string", "label": "Account name" },
+          "sortCode": { "type": "string", "label": "Sort code" },
+          "accountNumber": { "type": "string", "label": "Account number" },
+          "iban": { "type": "string", "label": "IBAN" }
+        }
+      }
+    }
+  },
+  {
+    "id": "billTo",
+    "label": "Bill to",
+    "icon": "user",
+    "schema": {
+      "name": { "type": "string", "label": "Customer name" },
+      "contact": { "type": "string", "label": "Contact" },
+      "email": { "type": "string", "label": "Email" },
+      "reference": { "type": "string", "label": "Account reference" },
+      "address": {
+        "type": "object",
+        "label": "Address",
+        "fields": {
+          "line1": { "type": "string", "label": "Line 1" },
+          "line2": { "type": "string", "label": "Line 2" },
+          "city": { "type": "string", "label": "City" },
+          "postcode": { "type": "string", "label": "Postcode" },
+          "country": { "type": "string", "label": "Country" }
+        }
+      }
+    }
+  },
+  {
+    "id": "invoice",
+    "label": "Invoice",
+    "schema": {
+      "number": { "type": "string", "label": "Invoice number" },
+      "issueDate": { "type": "date", "label": "Issue date" },
+      "dueDate": { "type": "date", "label": "Due date" },
+      "terms": { "type": "string", "label": "Payment terms" },
+      "purchaseOrder": { "type": "string", "label": "Purchase order" },
+      "project": { "type": "string", "label": "Project" },
+      "isOverdue": { "type": "boolean", "label": "Is overdue" },
+      "notes": { "type": "string", "label": "Notes" },
+      "lines": {
+        "type": "array",
+        "label": "Lines",
+        "itemSchema": {
+          "type": "object",
+          "fields": {
+            "description": { "type": "string", "label": "Description" },
+            "detail": { "type": "string", "label": "Detail" },
+            "quantity": { "type": "number", "label": "Quantity" },
+            "unit": { "type": "string", "label": "Unit" },
+            "unitPrice": { "type": "currency", "label": "Unit price", "currency": "GBP" },
+            "net": { "type": "currency", "label": "Net", "currency": "GBP" },
+            "vatRate": { "type": "percent", "label": "VAT rate" }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "totals",
+    "label": "Totals",
+    "schema": {
+      "net": { "type": "currency", "label": "Net", "currency": "GBP" },
+      "discount": { "type": "currency", "label": "Discount", "currency": "GBP" },
+      "netAfterDiscount": { "type": "currency", "label": "Net after discount", "currency": "GBP" },
+      "vatRate": { "type": "percent", "label": "VAT rate" },
+      "vat": { "type": "currency", "label": "VAT", "currency": "GBP" },
+      "gross": { "type": "currency", "label": "Total", "currency": "GBP" },
+      "paid": { "type": "currency", "label": "Already paid", "currency": "GBP" },
+      "balanceDue": { "type": "currency", "label": "Balance due", "currency": "GBP" },
+      "vatBreakdown": {
+        "type": "array",
+        "label": "VAT breakdown",
+        "itemSchema": {
+          "type": "object",
+          "fields": {
+            "rate": { "type": "percent", "label": "Rate" },
+            "net": { "type": "currency", "label": "Net", "currency": "GBP" },
+            "vat": { "type": "currency", "label": "VAT", "currency": "GBP" }
+          }
+        }
+      }
+    }
+  }
+]

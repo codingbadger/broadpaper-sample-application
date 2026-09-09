@@ -1,0 +1,51 @@
+<header class="bar">
+  <div class="bar__brand">
+    <strong>BroadPaper</strong>
+    <span>sample application</span>
+  </div>
+
+  <label class="bar__picker">
+    <span class="visually-hidden">Report</span>
+    <select [value]="selectedId()" (change)="onReportChange($event)" [disabled]="busy()">
+      @for (report of reports(); track report.id) {
+        <option [value]="report.id">{{ report.name }}</option>
+      }
+    </select>
+  </label>
+
+  @if (selected(); as report) {
+    <p class="bar__description">{{ report.description }}</p>
+  }
+
+  <div class="bar__actions">
+    <button type="button" (click)="save()" [disabled]="busy() || !loaded()">
+      Save{{ dirty() ? " •" : "" }}
+    </button>
+    <button type="button" (click)="exportInBrowser()" [disabled]="busy() || !loaded()">
+      Export in the browser
+    </button>
+    <button type="button" class="primary" (click)="renderOnServer()" [disabled]="busy() || !loaded()">
+      Render on the server
+    </button>
+  </div>
+</header>
+
+<p class="status" [class]="'status--' + status().tone" role="status">{{ status().text }}</p>
+
+<main class="canvas">
+  @if (loaded()) {
+    <bp-report-designer
+      [template]="template()"
+      [dataSources]="dataSources()"
+      [sampleData]="sampleData()"
+      [locale]="selected()?.locale"
+      [currency]="selected()?.currency"
+      [onExportPdf]="onExportPdf"
+      (templateChange)="onTemplateChange($event)"
+      (themeChange)="onThemeChange($event)" />
+  } @else {
+    <div class="placeholder">
+      <p>{{ status().text }}</p>
+    </div>
+  }
+</main>

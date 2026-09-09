@@ -1,0 +1,21 @@
+{
+  "name": "sample-render-service",
+  "private": true,
+  "version": "1.0.0",
+  "description": "The BroadPaper render service, installed from the packed tarballs exactly as a customer would get it from npm.",
+  "type": "module",
+  "scripts": {
+    "start": "broadpaper-server"
+  },
+  "dependencies": {
+    "@broadpaper/server": "file:../vendor/npm/broadpaper-server-0.1.0.tgz"
+  },
+  "overrides": {
+    "@broadpaper/blocks": "file:../vendor/npm/broadpaper-blocks-0.1.0.tgz",
+    "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz",
+    "@broadpaper/forme": "file:../vendor/npm/broadpaper-forme-0.1.0.tgz",
+    "@broadpaper/license": "file:../vendor/npm/broadpaper-license-0.1.0.tgz",
+    "@broadpaper/renderer": "file:../vendor/npm/broadpaper-renderer-0.1.0.tgz",
+    "@broadpaper/pdf": "file:../vendor/npm/broadpaper-pdf-0.1.0.tgz"
+  }
+}

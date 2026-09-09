@@ -1,0 +1,14 @@
+{
+  "name": "broadpaper-sample-application",
+  "private": true,
+  "version": "1.0.0",
+  "description": "An Angular front end and a .NET Core back end using the BroadPaper SDK: design a report in the browser, export it there, and render the saved template server-side.",
+  "type": "module",
+  "scripts": {
+    "vendor": "node scripts/vendor.mjs",
+    "seed": "npm --prefix tools run seed",
+    "start": "node scripts/start.mjs",
+    "start:service": "npm --prefix render-service start",
+    "start:web": "npm --prefix web start"
+  }
+}

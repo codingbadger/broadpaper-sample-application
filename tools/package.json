@@ -1,0 +1,17 @@
+{
+  "name": "sample-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Builds the starter templates, so the sample renders something on first run.",
+  "type": "module",
+  "scripts": {
+    "seed": "node seed-templates.mjs"
+  },
+  "dependencies": {
+    "@broadpaper/blocks": "file:../vendor/npm/broadpaper-blocks-0.1.0.tgz",
+    "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz"
+  },
+  "overrides": {
+    "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz"
+  }
+}

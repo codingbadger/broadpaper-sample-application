@@ -1,0 +1,68 @@
+{
+  "issuer": {
+    "name": "Northwind Supply Co.",
+    "legalName": "Northwind Supply Company Limited",
+    "email": "accounts@northwind.example",
+    "phone": "+44 20 7946 0102",
+    "vatNumber": "GB 412 9987 55",
+    "companyNumber": "09884127",
+    "address": {
+      "line1": "Unit 7, Cornbrook Works",
+      "city": "Manchester",
+      "postcode": "M15 4TR",
+      "country": "United Kingdom"
+    },
+    "bank": {
+      "name": "Metro Business Bank",
+      "accountName": "Northwind Supply Company Ltd",
+      "sortCode": "20-41-06",
+      "accountNumber": "70318842",
+      "iban": "GB29 METR 2041 0670 3188 42"
+    }
+  },
+  "billTo": {
+    "name": "Halstead Interiors Ltd",
+    "contact": "Priya Raman",
+    "email": "priya@halstead.example",
+    "reference": "HAL-00418",
+    "address": {
+      "line1": "3 Fenwick Yard",
+      "line2": "Kirkgate",
+      "city": "Leeds",
+      "postcode": "LS2 8BQ",
+      "country": "United Kingdom"
+    }
+  },
+  "invoice": {
+    "number": "INV-2026-0417",
+    "issueDate": "2026-06-30",
+    "dueDate": "2026-07-30",
+    "terms": "Net 30",
+    "purchaseOrder": "PO-HAL-2291",
+    "project": "Kirkgate reception refit",
+    "isOverdue": false,
+    "notes": "Goods remain the property of Northwind Supply Co. until paid for in full. Please quote the invoice number with payment.",
+    "lines": [
+      { "description": "Bespoke reception desk", "detail": "Walnut veneer, brushed steel base, 3.2m", "quantity": 1, "unit": "each", "unitPrice": 9840, "net": 9840, "vatRate": 0.2 },
+      { "description": "Emergency lighting retrofit", "detail": "Maintained 3-hour, self-test", "quantity": 132, "unit": "fitting", "unitPrice": 111.75, "net": 14751, "vatRate": 0.2 },
+      { "description": "Linear LED profiles", "detail": "2m, 3000K, surface mounted", "quantity": 46, "unit": "length", "unitPrice": 84.2, "net": 3873.2, "vatRate": 0.2 },
+      { "description": "Acoustic ceiling baffles", "detail": "1200 x 300, charcoal felt", "quantity": 64, "unit": "panel", "unitPrice": 62.4, "net": 3993.6, "vatRate": 0.2 },
+      { "description": "Delivery and installation", "detail": "Two fitters, three days, Leeds", "quantity": 3, "unit": "day", "unitPrice": 780, "net": 2340, "vatRate": 0.2 },
+      { "description": "Printed operation and maintenance manuals", "detail": "Zero-rated printed matter", "quantity": 4, "unit": "set", "unitPrice": 45, "net": 180, "vatRate": 0 }
+    ]
+  },
+  "totals": {
+    "net": 34977.8,
+    "discount": 1049.33,
+    "netAfterDiscount": 33928.47,
+    "vatRate": 0.2,
+    "vat": 6749.69,
+    "gross": 40678.16,
+    "paid": 10000,
+    "balanceDue": 30678.16,
+    "vatBreakdown": [
+      { "rate": 0.2, "net": 33748.47, "vat": 6749.69 },
+      { "rate": 0, "net": 180, "vat": 0 }
+    ]
+  }
+}

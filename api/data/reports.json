@@ -1,0 +1,16 @@
+[
+  {
+    "id": "sales",
+    "name": "Account activity",
+    "description": "A half-year sales summary for one customer: totals, a breakdown by category and month, and a line for every order.",
+    "locale": "en-GB",
+    "currency": "GBP"
+  },
+  {
+    "id": "invoice",
+    "name": "Invoice",
+    "description": "A single invoice: issuer and bill-to details, priced lines, VAT, and what is left to pay.",
+    "locale": "en-GB",
+    "currency": "GBP"
+  }
+]

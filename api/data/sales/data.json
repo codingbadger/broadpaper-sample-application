@@ -1,0 +1,59 @@
+{
+  "company": {
+    "name": "Northwind Supply Co.",
+    "email": "accounts@northwind.example",
+    "phone": "+44 20 7946 0102",
+    "vatNumber": "GB 412 9987 55",
+    "address": { "line1": "Unit 7, Cornbrook Works", "city": "Manchester", "postcode": "M15 4TR" }
+  },
+  "customer": {
+    "name": "Halstead Interiors Ltd",
+    "reference": "HAL-00418",
+    "contact": "Priya Raman",
+    "email": "priya@halstead.example",
+    "since": "2021-03-14",
+    "address": { "line1": "3 Fenwick Yard", "city": "Leeds", "postcode": "LS2 8BQ" }
+  },
+  "report": {
+    "title": "Account activity",
+    "period": "H1 2026",
+    "periodStart": "2026-01-01",
+    "periodEnd": "2026-06-30",
+    "preparedBy": "Danielle Okafor",
+    "summary": "Order volume held steady through the first half while average order value rose by a fifth, driven almost entirely by the shift into the Lighting range. Joinery softened against a strong comparator and is the one category behind target."
+  },
+  "sales": {
+    "total": 148920.5,
+    "orderCount": 12,
+    "averageOrder": 12410.04,
+    "growthPct": 0.184,
+    "targetPct": 1.06,
+    "orders": [
+      { "date": "2026-01-09", "reference": "SO-24118", "description": "Oak veneer panels, 18mm", "category": "Joinery", "quantity": 120, "unitPrice": 48.5, "total": 5820 },
+      { "date": "2026-01-27", "reference": "SO-24136", "description": "Brushed brass pendant fittings", "category": "Lighting", "quantity": 64, "unitPrice": 186, "total": 11904 },
+      { "date": "2026-02-11", "reference": "SO-24162", "description": "Acoustic ceiling baffles", "category": "Fit-out", "quantity": 210, "unitPrice": 62.4, "total": 13104 },
+      { "date": "2026-02-24", "reference": "SO-24189", "description": "Track lighting, 3-circuit", "category": "Lighting", "quantity": 88, "unitPrice": 143.75, "total": 12650 },
+      { "date": "2026-03-06", "reference": "SO-24203", "description": "Solid ash worktops", "category": "Joinery", "quantity": 34, "unitPrice": 412, "total": 14008 },
+      { "date": "2026-03-19", "reference": "SO-24221", "description": "Recessed downlights, warm white", "category": "Lighting", "quantity": 340, "unitPrice": 27.9, "total": 9486 },
+      { "date": "2026-04-02", "reference": "SO-24247", "description": "Partition glazing kits", "category": "Fit-out", "quantity": 46, "unitPrice": 358, "total": 16468 },
+      { "date": "2026-04-21", "reference": "SO-24268", "description": "Walnut shelving units", "category": "Joinery", "quantity": 52, "unitPrice": 214.5, "total": 11154 },
+      { "date": "2026-05-08", "reference": "SO-24290", "description": "Linear LED profiles, 2m", "category": "Lighting", "quantity": 175, "unitPrice": 84.2, "total": 14735 },
+      { "date": "2026-05-26", "reference": "SO-24311", "description": "Raised access flooring", "category": "Fit-out", "quantity": 480, "unitPrice": 31.25, "total": 15000 },
+      { "date": "2026-06-11", "reference": "SO-24334", "description": "Bespoke reception desk", "category": "Joinery", "quantity": 1, "unitPrice": 9840, "total": 9840 },
+      { "date": "2026-06-29", "reference": "SO-24357", "description": "Emergency lighting retrofit", "category": "Lighting", "quantity": 132, "unitPrice": 111.75, "total": 14751.5 }
+    ],
+    "byCategory": [
+      { "category": "Lighting", "total": 63526.5, "share": 0.4266 },
+      { "category": "Fit-out", "total": 44572, "share": 0.2993 },
+      { "category": "Joinery", "total": 40822, "share": 0.2741 }
+    ],
+    "byMonth": [
+      { "month": "Jan", "total": 17724, "target": 20000 },
+      { "month": "Feb", "total": 25754, "target": 22000 },
+      { "month": "Mar", "total": 23494, "target": 22000 },
+      { "month": "Apr", "total": 27622, "target": 24000 },
+      { "month": "May", "total": 29735, "target": 26000 },
+      { "month": "Jun", "total": 24591.5, "target": 26000 }
+    ]
+  }
+}

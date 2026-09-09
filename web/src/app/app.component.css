@@ -1,0 +1,120 @@
+/* Enough chrome to drive the sample and no more: the designer is the interesting
+   part of this page and everything here is meant to stay out of its way. */
+
+:host {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e3e5e8;
+  background: #fff;
+}
+
+.bar__brand {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.bar__brand span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.bar__picker select {
+  padding: 6px 10px;
+  border: 1px solid #d3d6da;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+}
+
+/* The one element allowed to shrink, so a long description never pushes the
+   buttons off the end of the bar. `min-width: 0` is what lets it: a flex child
+   will not go below its min-content width without it. */
+.bar__description {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.bar__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+button {
+  padding: 6px 12px;
+  border: 1px solid #d3d6da;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #f4f5f7;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.primary {
+  border-color: #1f2937;
+  background: #1f2937;
+  color: #fff;
+}
+
+button.primary:hover:not(:disabled) {
+  background: #374151;
+}
+
+.status {
+  margin: 0;
+  padding: 6px 16px;
+  border-bottom: 1px solid #e3e5e8;
+  font-size: 12px;
+  background: #f8f9fa;
+  color: #374151;
+}
+
+.status--success { background: #ecfdf3; color: #05603a; }
+.status--error   { background: #fef3f2; color: #b42318; }
+.status--working { background: #eff8ff; color: #175cd3; }
+
+.canvas {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: #6b7280;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
