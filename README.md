@@ -27,7 +27,7 @@ breaks. Three times already, it has.
 
 | | |
 | --- | --- |
-| `angular/` | Angular 19, zoneless. Designer, read-only viewer, browser export, and calls to the API. |
+| `angular/` | Angular 22, zoneless. Designer, read-only viewer, browser export, and calls to the API. |
 | `react/` | React 19 on Vite. The same, in React. |
 | `api/` | ASP.NET Core on .NET 10. Owns the data contract, stores saved templates, and renders server-side through `BroadPaper.Client`. |
 | `render-service/` | `@broadpaper/server`, the render service the API is a client of. |
@@ -66,7 +66,9 @@ WebAssembly, runs in the tab.
 
 ## Running it
 
-You need Node 20.19+ or 22.12+, the .NET 10 SDK, and a BroadPaper checkout
+You need **Node 22.22.3+, 24.15+ or 26+** — the floor is the Angular 22 CLI's, and
+it is a version most machines will need a patch bump to reach — plus the .NET 10
+SDK, and a BroadPaper checkout
 beside this one (`../broadpaper`) with pnpm available.
 
 ```bash
