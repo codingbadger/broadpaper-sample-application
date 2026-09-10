@@ -1,14 +1,21 @@
 /**
- * Packs the BroadPaper SDK out of its own repository and installs it here.
+ * Overrides the installed BroadPaper packages with a local build of the SDK.
  *
- * The packages are not published yet, so this sample consumes them the way a
- * customer will once they are: as the real npm tarballs and the real .nupkg,
- * not as a source checkout wired in with path aliases. What CI produces as a
- * workflow artefact, this produces locally.
+ * You do not need this to run the sample. The packages are on npm and
+ * nuget.org, and `npm install` gets them like any other dependency — which is
+ * the point of this repository, and what the README tells you to do.
+ *
+ * This is for the other case: changing the SDK and wanting to see the change
+ * here before publishing it. It packs the SDK out of its own checkout and
+ * installs those tarballs over the top.
  *
  *   node scripts/vendor.mjs [--sdk ../broadpaper] [--skip-build]
  *
- * Three things it does that are easy to forget by hand, each of which cost an
+ * Installed with `--no-save`, so the manifests go on naming the published
+ * versions and nothing you commit says otherwise. A plain `npm install` puts
+ * the registry copies back.
+ *
+ * Two things it does that are easy to forget by hand, each of which cost an
  * hour the first time:
  *
  *   1. It builds the SDK first. LICENSE and THIRD-PARTY-NOTICES.md are
@@ -21,15 +28,9 @@
  *   2. It uses `pnpm pack`, not `npm pack`. The packages depend on each other
  *      as `workspace:*`, and only pnpm resolves that to a real version on the
  *      way into the tarball. An npm-packed tarball installs nowhere.
- *
- *   3. It deletes each project's package-lock.json and its node_modules copy of
- *      @broadpaper before reinstalling. A lockfile pins the integrity hash of
- *      the tarball it first saw, and every rebuild at the same 0.1.0 produces a
- *      different hash for the same filename — so npm serves the old contents
- *      out of its cache and reports success.
  */
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, rmSync, readdirSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, readdirSync, readFileSync } from "node:fs";
 import { join, resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -53,6 +54,9 @@ if (!existsSync(join(sdk, "packages"))) {
 const run = (command, commandArgs, cwd) =>
   execFileSync(command, commandArgs, { cwd, stdio: "inherit", shell: process.platform === "win32" });
 
+/** Taken from the SDK itself, so a version bump there needs no edit here. */
+const version = JSON.parse(readFileSync(join(sdk, "packages", "core", "package.json"), "utf8")).version;
+
 const npmDir = join(root, "vendor", "npm");
 const nugetDir = join(root, "vendor", "nuget");
 
@@ -73,7 +77,7 @@ rmSync(nugetDir, { recursive: true, force: true });
 mkdirSync(npmDir, { recursive: true });
 mkdirSync(nugetDir, { recursive: true });
 
-console.log("\nPacking the npm packages…");
+console.log(`\nPacking the npm packages at ${version}…`);
 for (const name of readdirSync(join(sdk, "packages"))) {
   // @broadpaper/angular is an ng-packagr build, and an Angular library is
   // packed from its dist: ng-packagr writes the published manifest itself —
@@ -89,23 +93,32 @@ for (const name of readdirSync(join(sdk, "packages"))) {
 console.log("\nPacking the NuGet client…");
 run("dotnet", ["pack", "dotnet/BroadPaper.Client/BroadPaper.Client.csproj", "-c", "Release", "--no-build", "--output", nugetDir], sdk);
 
-// ── Install ───────────────────────────────────────────────────────────────
+// ── Install over the top ──────────────────────────────────────────────────
 
-console.log("\nReinstalling…");
-// The two front ends are listed alongside the shared projects rather than
-// discovered, so a missing one is an error you can see rather than a silent
-// skip. Both consume the same tarballs; neither has a copy of the backend.
+console.log("\nInstalling the local build over the published one…");
 for (const project of ["render-service", "tools", "angular", "react"]) {
   const dir = join(root, project);
   if (!existsSync(join(dir, "package.json"))) {
     console.error(`No package.json in ${project}/ — the layout has moved.`);
     process.exit(1);
   }
-  // See note 3 above: without both of these, npm reports success and installs
-  // the previous tarball's contents.
-  rmSync(join(dir, "package-lock.json"), { force: true });
-  rmSync(join(dir, "node_modules", "@broadpaper"), { recursive: true, force: true });
-  run("npm", ["install"], dir);
+
+  // Only the packages this project actually declares. Installing all ten
+  // everywhere would put the designer into the render service and the server
+  // into a browser app.
+  const declared = Object.keys(JSON.parse(readFileSync(join(dir, "package.json"), "utf8")).dependencies ?? {})
+    .filter((d) => d.startsWith("@broadpaper/"))
+    .map((d) => join(npmDir, `broadpaper-${d.slice("@broadpaper/".length)}-${version}.tgz`));
+
+  const missing = declared.filter((f) => !existsSync(f));
+  if (missing.length) {
+    console.error(`\nNot packed: ${missing.map((f) => f.split(/[\\/]/).pop()).join(", ")}`);
+    console.error(`The SDK is at ${version}; this project wants packages that were not produced.`);
+    process.exit(1);
+  }
+  if (!declared.length) continue;
+
+  run("npm", ["install", "--no-save", ...declared], dir);
 }
 
 // The dev server caches its dependency pre-bundle, and will happily keep
@@ -114,3 +127,4 @@ for (const project of ["render-service", "tools", "angular", "react"]) {
 rmSync(join(root, "angular", ".angular", "cache"), { recursive: true, force: true });
 
 console.log(`\nDone. ${readdirSync(npmDir).length} tarballs and ${readdirSync(nugetDir).length} nupkg in vendor/.`);
+console.log("`npm install` in any project puts the published versions back.\n");

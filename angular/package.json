@@ -17,17 +17,14 @@
     "@angular/platform-browser": "^22.0.0",
     "@angular/platform-browser-dynamic": "^22.0.0",
     "@angular/router": "^22.0.0",
+    "@broadpaper/angular": "^0.1.1",
+    "@broadpaper/blocks": "^0.1.1",
+    "@broadpaper/core": "^0.1.1",
+    "@broadpaper/forme": "^0.1.1",
+    "@formepdf/core": "^0.20.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0",
-    "@broadpaper/angular": "file:../vendor/npm/broadpaper-angular-0.1.0.tgz",
-    "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz",
-    "@broadpaper/blocks": "file:../vendor/npm/broadpaper-blocks-0.1.0.tgz",
-    "@broadpaper/forme": "file:../vendor/npm/broadpaper-forme-0.1.0.tgz",
-    "@formepdf/core": "^0.20.0",
-    "@broadpaper/editor": "file:../vendor/npm/broadpaper-editor-0.1.0.tgz",
-    "@broadpaper/renderer": "file:../vendor/npm/broadpaper-renderer-0.1.0.tgz",
-    "@broadpaper/license": "file:../vendor/npm/broadpaper-license-0.1.0.tgz"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular/cli": "^22.0.0",
@@ -41,15 +38,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~6.0.0",
     "@angular/build": "^22.0.0"
-  },
-  "overrides": {
-    "@broadpaper/angular": "file:../vendor/npm/broadpaper-angular-0.1.0.tgz",
-    "@broadpaper/blocks": "file:../vendor/npm/broadpaper-blocks-0.1.0.tgz",
-    "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz",
-    "@broadpaper/editor": "file:../vendor/npm/broadpaper-editor-0.1.0.tgz",
-    "@broadpaper/forme": "file:../vendor/npm/broadpaper-forme-0.1.0.tgz",
-    "@broadpaper/license": "file:../vendor/npm/broadpaper-license-0.1.0.tgz",
-    "@broadpaper/pdf": "file:../vendor/npm/broadpaper-pdf-0.1.0.tgz",
-    "@broadpaper/renderer": "file:../vendor/npm/broadpaper-renderer-0.1.0.tgz"
   }
 }

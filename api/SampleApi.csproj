@@ -11,7 +11,7 @@
     <!-- Restored from vendor/nuget via the nuget.config at the repository root.
          This is the multi-targeted package: on net10.0 it resolves lib/net10.0,
          and an application on net8.0 would get lib/net8.0 from the same file. -->
-    <PackageReference Include="BroadPaper.Client" Version="0.1.0" />
+    <PackageReference Include="BroadPaper.Client" Version="0.1.1" />
   </ItemGroup>
 
   <ItemGroup>

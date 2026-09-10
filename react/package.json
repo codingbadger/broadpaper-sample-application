@@ -9,16 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "@broadpaper/react": "file:../vendor/npm/broadpaper-react-0.1.0.tgz",
-    "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz",
-    "@broadpaper/blocks": "file:../vendor/npm/broadpaper-blocks-0.1.0.tgz",
-    "@broadpaper/forme": "file:../vendor/npm/broadpaper-forme-0.1.0.tgz",
+    "@broadpaper/blocks": "^0.1.1",
+    "@broadpaper/core": "^0.1.1",
+    "@broadpaper/forme": "^0.1.1",
+    "@broadpaper/react": "^0.1.1",
     "@formepdf/core": "^0.20.0",
-    "@broadpaper/editor": "file:../vendor/npm/broadpaper-editor-0.1.0.tgz",
-    "@broadpaper/renderer": "file:../vendor/npm/broadpaper-renderer-0.1.0.tgz",
-    "@broadpaper/license": "file:../vendor/npm/broadpaper-license-0.1.0.tgz"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.2",

@@ -18,10 +18,10 @@ React's, and never BroadPaper's. The back end is shared rather than duplicated:
 a fix to the API is a fix for both, and two copies of it would have drifted
 inside a month.
 
-It exists to test the packages as a customer receives them. Everything here is
-installed from the packed npm tarballs and the packed `.nupkg` — not from a
-source checkout wired in with path aliases — so if the packaging is wrong, this
-breaks. Three times already, it has.
+Everything here installs from **npm and nuget.org**, exactly as you would — no
+workspace, no path aliases, no local tarballs. `npm install` and
+`dotnet restore` and you have what a customer has, which is the point: if the
+packaging is wrong, this breaks. Three times already, it has.
 
 ## What is in it
 
@@ -32,9 +32,8 @@ breaks. Three times already, it has.
 | `api/` | ASP.NET Core on .NET 10. Owns the data contract, stores saved templates, and renders server-side through `BroadPaper.Client`. |
 | `render-service/` | `@broadpaper/server`, the render service the API is a client of. |
 | `tools/` | Builds the starter templates with `@broadpaper/core`, which is also the shortest proof it works outside a browser. |
-| `scripts/vendor.mjs` | Packs the SDK out of its own repository into `vendor/` and installs it into every project. |
 | `scripts/start.mjs` | Starts the render service, the API and one front end, and stops them together. |
-| `vendor/` | The packed artefacts. Generated — not in git. |
+| `scripts/vendor.mjs` | Optional. Installs a *local* SDK build over the published one, for trying a change before releasing it. |
 
 Two reports are defined, in `api/data`. They share no fields and no code:
 
@@ -66,13 +65,12 @@ WebAssembly, runs in the tab.
 
 ## Running it
 
-You need **Node 22.22.3+, 24.15+ or 26+** — the floor is the Angular 22 CLI's, and
-it is a version most machines will need a patch bump to reach — plus the .NET 10
-SDK, and a BroadPaper checkout
-beside this one (`../broadpaper`) with pnpm available.
+You need **Node 22.22.3+, 24.15+ or 26+** — the floor is the Angular 22 CLI's,
+and a version most machines will need a patch bump to reach — plus the .NET 10
+SDK. Nothing else: no BroadPaper checkout, no pnpm.
 
 ```bash
-node scripts/vendor.mjs        # build the SDK, pack it, install it
+npm --prefix angular install   # or react, whichever you want
 npm --prefix tools run seed    # starter templates, so page one is not blank
 npm start                      # Angular, on :4200
 npm run start:react            # or React, on :4300
@@ -90,8 +88,19 @@ BroadPaper__Token=dev dotnet run --project api/SampleApi.csproj --urls http://12
 cd angular && npm start        # or: cd react && npm start
 ```
 
-`node scripts/vendor.mjs --sdk <path>` if the SDK is somewhere else, and
-`--skip-build` if you have just built it.
+### Trying an unreleased SDK
+
+If you are changing BroadPaper itself and want to see the change here before
+publishing it, `scripts/vendor.mjs` packs your local checkout and installs it
+over the top:
+
+```bash
+node scripts/vendor.mjs --sdk ../broadpaper    # --skip-build if you just built
+```
+
+It installs with `--no-save`, so the manifests go on naming the published
+versions and nothing you commit says otherwise. `npm install` puts the registry
+copies back. You need pnpm and a BroadPaper checkout for this, and only this.
 
 Either one opens on an **overview**: what BroadPaper is, which front end is
 running, the three processes and what each of them owns, and a card per
@@ -123,8 +132,8 @@ service and it goes away.
 
 Each of these made the packages unusable, or nearly so, from a real host
 application. All three were fixed in the SDK on 10 September 2026, and the
-workarounds this sample carried for them are gone — it now consumes the tarballs
-exactly as a customer would.
+workarounds this sample carried for them are gone — it now installs from npm and
+nuget.org exactly as a customer would.
 
 **`@broadpaper/angular` was not built as an Angular library.** It was bundled
 with tsup, so its `@Component` decorators were applied at runtime by a
@@ -171,19 +180,21 @@ stopped existing.
 
 ## Things that will waste your time
 
+**Both of these are about `scripts/vendor.mjs` only.** Installing from npm, as
+everybody now does, neither can happen.
+
 **Pack after building, always.** `dist` is whatever the last build left, and
 `LICENSE`/`THIRD-PARTY-NOTICES.md` are generated into each package and
 git-ignored. Packing a stale tree gives you tarballs missing their notices and
 carrying old code, and nothing announces it — the first version of this sample
 tested a two-day-old SDK and showed PRO badges on blocks that had stopped
-carrying a tier. `scripts/vendor.mjs` builds first for that reason.
+carrying a tier. `vendor.mjs` builds first for that reason.
 
-**Re-packing at the same version does not update an install.** A lockfile pins
-the integrity hash of the tarball it first saw, and every rebuild of 0.1.0
-produces a different hash under the same filename. npm serves the old contents
-from its cache and reports success. `scripts/vendor.mjs` deletes each
-`package-lock.json` and each `node_modules/@broadpaper` before installing, and
-clears Angular's dev-server cache, which caches its own copy on top.
+**A local build at the same version can look like it did not install.** npm
+caches by name and version, so packing the same version twice and installing it
+again can serve you the first one. `vendor.mjs` clears Angular's dev-server
+cache for the same reason — it keeps its own copy of the dependency pre-bundle
+on top of npm's.
 
 **Sections go in `template.body`.** Assigning `template.sections` is plausible,
 serialises without complaint, and renders an empty document whose only clue is
