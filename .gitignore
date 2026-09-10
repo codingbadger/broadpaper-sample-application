@@ -11,3 +11,16 @@ api/App_Data/
 # The packed BroadPaper artefacts. Rebuild them with scripts/vendor.mjs rather
 # than committing 8 MB of tarballs that go stale the moment the SDK changes.
 vendor/
+
+# The lockfiles, which is unusual and deliberate.
+#
+# Every project here depends on the SDK as `file:../vendor/npm/*.tgz`, and a
+# lockfile pins the integrity hash of each of those tarballs. They are rebuilt
+# at the same 0.1.0 version constantly, and every rebuild produces a different
+# hash for the same filename — so a committed lockfile is stale the moment
+# anyone runs scripts/vendor.mjs, which deletes it before installing anyway.
+#
+# It could not be used even if it were current: `npm ci` needs the tarballs the
+# hashes describe, and vendor/ is not in git. Commit these again on the day the
+# packages are published and the dependencies become ordinary registry ones.
+package-lock.json
