@@ -3,9 +3,12 @@
  *
  * There are three because the architecture has three. The render service is a
  * Node process that owns the PDF engine; the .NET API is an HTTP client of it;
- * the Angular app talks only to the API. Nothing here is orchestration you
- * would need in production — run each in its own terminal if you prefer, the
- * commands are in the README.
+ * the front end talks only to the API. Nothing here is orchestration you would
+ * need in production — run each in its own terminal if you prefer, the commands
+ * are in the README.
+ *
+ *   node scripts/start.mjs            # Angular, on :4200
+ *   node scripts/start.mjs --react    # React, on :4300
  */
 import { spawn } from "node:child_process";
 import { dirname, resolve } from "node:path";
@@ -13,6 +16,12 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const windows = process.platform === "win32";
+
+// The two front ends are alternatives, not layers: the same application against
+// the same API, so running both would only prove two dev servers can hold two
+// ports.
+const frontEnd = process.argv.includes("--react") ? "react" : "angular";
+const port = frontEnd === "react" ? 4300 : 4200;
 
 const services = [
   {
@@ -34,11 +43,11 @@ const services = [
     env: { BroadPaper__Token: "dev" }
   },
   {
-    name: "web",
+    name: frontEnd,
     colour: "\x1b[32m",
     command: "npm",
     args: ["start"],
-    cwd: resolve(root, "web"),
+    cwd: resolve(root, frontEnd),
     env: {}
   }
 ];
@@ -91,4 +100,4 @@ function stop() {
 process.on("SIGINT", stop);
 process.on("SIGTERM", stop);
 
-console.log("\nStarting three processes. The app will be at http://localhost:4200 in a few seconds.\n");
+console.log(`\nStarting three processes. The ${frontEnd} app will be at http://localhost:${port} in a few seconds.\n`);

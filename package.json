@@ -8,7 +8,7 @@
     "vendor": "node scripts/vendor.mjs",
     "seed": "npm --prefix tools run seed",
     "start": "node scripts/start.mjs",
-    "start:service": "npm --prefix render-service start",
-    "start:web": "npm --prefix web start"
+    "start:react": "node scripts/start.mjs --react",
+    "start:service": "npm --prefix render-service start"
   }
 }

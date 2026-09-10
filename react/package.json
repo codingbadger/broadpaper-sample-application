@@ -1,0 +1,30 @@
+{
+  "name": "broadpaper-sample-react",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@broadpaper/react": "file:../vendor/npm/broadpaper-react-0.1.0.tgz",
+    "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz",
+    "@broadpaper/blocks": "file:../vendor/npm/broadpaper-blocks-0.1.0.tgz",
+    "@broadpaper/forme": "file:../vendor/npm/broadpaper-forme-0.1.0.tgz",
+    "@formepdf/core": "^0.20.0",
+    "@broadpaper/editor": "file:../vendor/npm/broadpaper-editor-0.1.0.tgz",
+    "@broadpaper/renderer": "file:../vendor/npm/broadpaper-renderer-0.1.0.tgz",
+    "@broadpaper/license": "file:../vendor/npm/broadpaper-license-0.1.0.tgz"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.7.2",
+    "vite": "^5.4.11"
+  }
+}

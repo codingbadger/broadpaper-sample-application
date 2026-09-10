@@ -1,0 +1,385 @@
+/* The designer brings its own styles — they are compiled into the package, not
+   a stylesheet you have to remember to import. This is only the page around it. */
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  color: #111827;
+  background: #f4f5f7;
+}
+
+/* Enough chrome to drive the sample and no more: the designer is the interesting
+   part of this page and everything here is meant to stay out of its way.
+
+   The same stylesheet as the Angular sample, with its :host rule written as
+   #root. Angular scopes a component sheet for you; here the app owns the page,
+   so the grid goes on the element React is mounted into. */
+
+#root {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e3e5e8;
+  background: #fff;
+}
+
+.bar__brand {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.bar__brand span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.bar__picker select {
+  padding: 6px 10px;
+  border: 1px solid #d3d6da;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+}
+
+/* The one element allowed to shrink, so a long description never pushes the
+   buttons off the end of the bar. `min-width: 0` is what lets it: a flex child
+   will not go below its min-content width without it. */
+.bar__description {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+.bar__actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+button {
+  padding: 6px 12px;
+  border: 1px solid #d3d6da;
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #f4f5f7;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.primary {
+  border-color: #1f2937;
+  background: #1f2937;
+  color: #fff;
+}
+
+button.primary:hover:not(:disabled) {
+  background: #374151;
+}
+
+.status {
+  margin: 0;
+  padding: 6px 16px;
+  border-bottom: 1px solid #e3e5e8;
+  font-size: 12px;
+  background: #f8f9fa;
+  color: #374151;
+}
+
+.status--success { background: #ecfdf3; color: #05603a; }
+.status--error   { background: #fef3f2; color: #b42318; }
+.status--working { background: #eff8ff; color: #175cd3; }
+
+.canvas {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.placeholder {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: #6b7280;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* The landing page.
+ *
+ * A designer dropped straight into a viewport explains nothing to somebody who
+ * has not seen this product before: it is dense, it is unfamiliar, and every
+ * button on it is a guess. So the sample opens on a page that says what this is,
+ * which front end is running, and what each of the four things actually does —
+ * and only then hands over the canvas.
+ *
+ * Deliberately plain. This is the part of the page that is *not* BroadPaper, and
+ * it should not look like it is competing with the product it introduces.
+ */
+
+.home {
+  height: 100%;
+  overflow: auto;
+  background: #fff;
+}
+
+.home__inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 48px 24px 72px;
+}
+
+.home__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.home__badge {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: #111827;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+
+.home h1 {
+  margin: 0 0 16px;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.home__lede {
+  margin: 0 0 8px;
+  max-width: 68ch;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.home__lede + .home__lede {
+  margin-bottom: 32px;
+}
+
+/* The three processes, as a row rather than a paragraph: it is the one thing
+   about this sample that is genuinely architectural, and a diagram says it
+   faster than a sentence. */
+.home__flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 8px;
+  margin: 0 0 40px;
+  padding: 16px;
+  border: 1px solid #e3e5e8;
+  border-radius: 10px;
+  background: #f8f9fa;
+}
+
+.home__node {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.home__node b {
+  display: block;
+  font-size: 13px;
+}
+
+.home__node span {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #6b7280;
+}
+
+.home__arrow {
+  align-self: center;
+  color: #9ca3af;
+  font-size: 18px;
+}
+
+.home__section {
+  margin: 0 0 14px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+/* Report picker: a real choice, so it is a pair of buttons rather than a select
+   hidden in a toolbar. The two reports share no fields and no code, which is
+   most of what the picker is here to demonstrate. */
+.home__reports {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin: 0 0 40px;
+}
+
+.home__report {
+  padding: 14px 16px;
+  border: 1px solid #d3d6da;
+  border-radius: 10px;
+  background: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home__report:hover:not(:disabled) { border-color: #9ca3af; }
+.home__report:disabled { opacity: 0.5; cursor: default; }
+
+.home__report[aria-pressed="true"] {
+  border-color: #111827;
+  box-shadow: inset 0 0 0 1px #111827;
+}
+
+.home__report b { display: block; font-size: 14px; }
+
+.home__report span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* Two columns, not auto-fit: there are four cards, and auto-fit gives three
+   across at this width with the fourth stranded on a row of its own. */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 0 0 36px;
+}
+
+@media (max-width: 760px) {
+  .cards { grid-template-columns: 1fr; }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #e3e5e8;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.card__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.card h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.card__where {
+  flex-shrink: 0;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.card__what {
+  margin: 0 0 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.card p:not(.card__what) {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+/* Pushes the button to the bottom, so cards of different lengths still line
+   their actions up. Written with both classes because `.card p:not(.card__what)`
+   above is the more specific selector and its `margin: 0 0 16px` would
+   otherwise reset the `auto` — the button then floats wherever the prose ends. */
+.card .card__action {
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
+.card button {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 13.5px;
+}
+
+.card--muted { background: #f8f9fa; }
+
+.home__note {
+  margin: 0;
+  padding-top: 24px;
+  border-top: 1px solid #e3e5e8;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+.home__note code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: #eef0f2;
+  font-size: 12px;
+}
+
+/* The bar's back link, shown only once the canvas has taken over the page. */
+.bar__back {
+  flex-shrink: 0;
+  padding: 6px 10px;
+}
+
+.bar__where {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: #6b7280;
+}

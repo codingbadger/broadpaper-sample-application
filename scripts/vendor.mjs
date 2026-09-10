@@ -75,7 +75,15 @@ mkdirSync(nugetDir, { recursive: true });
 
 console.log("\nPacking the npm packages…");
 for (const name of readdirSync(join(sdk, "packages"))) {
-  run("pnpm", ["pack", "--pack-destination", npmDir], join(sdk, "packages", name));
+  // @broadpaper/angular is an ng-packagr build, and an Angular library is
+  // packed from its dist: ng-packagr writes the published manifest itself —
+  // entry points, the exports map, the FESM path — and puts it there beside the
+  // compiled code. Packing the source directory produces a tarball with none of
+  // that in it. Keyed on the file, so the next library built this way needs no
+  // edit here, and matching what packages.yml does in the SDK's own CI.
+  const dir = join(sdk, "packages", name);
+  const built = join(dir, "dist");
+  run("pnpm", ["pack", "--pack-destination", npmDir], existsSync(join(built, "package.json")) ? built : dir);
 }
 
 console.log("\nPacking the NuGet client…");
@@ -84,8 +92,15 @@ run("dotnet", ["pack", "dotnet/BroadPaper.Client/BroadPaper.Client.csproj", "-c"
 // ── Install ───────────────────────────────────────────────────────────────
 
 console.log("\nReinstalling…");
-for (const project of ["render-service", "tools", "web"]) {
+// The two front ends are listed alongside the shared projects rather than
+// discovered, so a missing one is an error you can see rather than a silent
+// skip. Both consume the same tarballs; neither has a copy of the backend.
+for (const project of ["render-service", "tools", "angular", "react"]) {
   const dir = join(root, project);
+  if (!existsSync(join(dir, "package.json"))) {
+    console.error(`No package.json in ${project}/ — the layout has moved.`);
+    process.exit(1);
+  }
   // See note 3 above: without both of these, npm reports success and installs
   // the previous tarball's contents.
   rmSync(join(dir, "package-lock.json"), { force: true });
@@ -96,6 +111,6 @@ for (const project of ["render-service", "tools", "web"]) {
 // The dev server caches its dependency pre-bundle, and will happily keep
 // serving the packages it saw last, which looks exactly like the install
 // having failed.
-rmSync(join(root, "web", ".angular", "cache"), { recursive: true, force: true });
+rmSync(join(root, "angular", ".angular", "cache"), { recursive: true, force: true });
 
 console.log(`\nDone. ${readdirSync(npmDir).length} tarballs and ${readdirSync(nugetDir).length} nupkg in vendor/.`);

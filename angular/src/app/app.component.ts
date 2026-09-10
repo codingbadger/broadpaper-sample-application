@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, computed, ChangeDetectionStrategy, inject } from "@angular/core";
-import { ReportDesignerComponent, type ExportContext } from "@broadpaper/angular";
+import { ReportDesignerComponent, ReportViewerComponent, type ExportContext } from "@broadpaper/angular";
 import { createRegistry } from "@broadpaper/blocks";
 import type { DataSource, ReportData, ReportTemplate, Theme } from "@broadpaper/core";
 import { ReportApiService, type ReportSummary } from "./report-api.service";
@@ -10,10 +10,10 @@ type Tone = "info" | "success" | "error" | "working";
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [ReportDesignerComponent],
+  imports: [ReportDesignerComponent, ReportViewerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./app.component.html",
-  styleUrl: "./app.component.css"
+  styleUrls: ["./app.component.css", "./landing.css"]
 })
 export class AppComponent implements OnInit {
   private readonly api = inject(ReportApiService);
@@ -39,7 +39,20 @@ export class AppComponent implements OnInit {
 
   /** The template as it currently stands in the designer, saved or not. */
   private live: ReportTemplate | null = null;
-  private theme: Theme | undefined;
+  /** A signal, not a field: the read view rebuilds when the brand changes. */
+  readonly theme = signal<Theme | undefined>(undefined);
+
+  /**
+   * Which of the three the page is showing.
+   *
+   * It opens on `home` rather than on the designer. A designer dropped straight
+   * into a viewport explains nothing to somebody meeting this product for the
+   * first time — it is dense, and every control on it is a guess. The overview
+   * says what each of the four things does, and hands over the canvas only when
+   * asked.
+   */
+  readonly view = signal<"home" | "design" | "read">("home");
+
 
   async ngOnInit(): Promise<void> {
     try {
@@ -49,18 +62,6 @@ export class AppComponent implements OnInit {
     } catch (e) {
       this.fail("Could not reach the API. Is it running on :5170?", e);
     }
-  }
-
-  async onReportChange(event: Event): Promise<void> {
-    const select = event.target as HTMLSelectElement;
-    const id = select.value;
-    if (id === this.selectedId()) return;
-
-    if (this.dirty() && !confirm("You have unsaved changes to this report. Switch anyway?")) {
-      select.value = this.selectedId();
-      return;
-    }
-    await this.open(id);
   }
 
   /**
@@ -83,6 +84,7 @@ export class AppComponent implements OnInit {
       ]);
 
       this.selectedId.set(id);
+      this.view.set("home");
       this.dataSources.set(dataSources);
       this.sampleData.set(data);
       this.template.set(template ?? undefined);
@@ -102,11 +104,33 @@ export class AppComponent implements OnInit {
 
   onTemplateChange(template: ReportTemplate): void {
     this.live = template;
+    // Also into the signal, so the read view shows the edit rather than the last
+    // load. Feeding it back to the designer is safe: the wrapper ignores a
+    // template it just emitted, which is exactly this object.
+    this.template.set(template);
     this.dirty.set(true);
   }
 
   onThemeChange(theme: Theme): void {
-    this.theme = theme;
+    this.theme.set(theme);
+  }
+
+  /**
+   * The designer and the read view show the template as it stands, saved or
+   * not, because the question they answer is "what does this look like" and not
+   * "what would the server send". `renderOnServer` is the one that cares about
+   * that, and warns.
+   */
+  show(view: "home" | "design" | "read"): void {
+    if (view === "read" && !this.template()) return;
+    this.view.set(view);
+  }
+
+  /** Picking a report on the overview loads it and stays put. */
+  async choose(id: string): Promise<void> {
+    if (id === this.selectedId()) return;
+    if (this.dirty() && !confirm("You have unsaved changes to this report. Switch anyway?")) return;
+    await this.open(id);
   }
 
   // ── Save ────────────────────────────────────────────────────────────────
@@ -147,13 +171,13 @@ export class AppComponent implements OnInit {
         template,
         registry: this.registry,
         data,
-        theme: ctx?.theme ?? this.theme,
+        theme: ctx?.theme ?? this.theme(),
         dataSources: ctx?.dataSources ?? this.dataSources(),
         locale: report?.locale,
         currency: report?.currency
       });
 
-      this.show(out.blob, `${this.selectedId()}-browser.pdf`);
+      this.openFile(out.blob, `${this.selectedId()}-browser.pdf`);
       const plural = out.pages === 1 ? "" : "s";
       const warnings = out.warnings.length ? ` (${out.warnings.length} warning${out.warnings.length === 1 ? "" : "s"} — see the console)` : "";
       this.status.set({ text: `Rendered ${out.pages} page${plural} in the browser${warnings}.`, tone: "success" });
@@ -181,7 +205,7 @@ export class AppComponent implements OnInit {
     this.status.set({ text: "Rendering on the server…", tone: "working" });
     try {
       const blob = await this.api.renderOnServer(this.selectedId());
-      this.show(blob, `${this.selectedId()}-server.pdf`);
+      this.openFile(blob, `${this.selectedId()}-server.pdf`);
       this.status.set({ text: `Rendered on the server — ${(blob.size / 1024).toFixed(0)} KB, with no browser involved.`, tone: "success" });
     } catch (e) {
       this.fail("Server render failed.", e);
@@ -193,7 +217,7 @@ export class AppComponent implements OnInit {
   // ── Odds and ends ───────────────────────────────────────────────────────
 
   /** Opens the file in a new tab, falling back to a download if that is blocked. */
-  private show(blob: Blob, filename: string): void {
+  private openFile(blob: Blob, filename: string): void {
     const url = URL.createObjectURL(blob);
     const tab = window.open(url, "_blank");
     if (!tab) {

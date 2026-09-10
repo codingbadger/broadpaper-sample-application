@@ -21,11 +21,15 @@ builder.Services.AddBroadPaper(o =>
     o.Token = builder.Configuration["BroadPaper:Token"];
 });
 
-// The Angular dev server is a different origin, so the browser needs telling.
-// Serve the two together in production and none of this is needed.
+// Either dev server is a different origin, so the browser needs telling. Both
+// are listed because the two front ends are alternatives against this one API —
+// whichever you started, it is the same server answering. Serve a front end
+// together with the API in production and none of this is needed.
 const string DevCors = "dev";
 builder.Services.AddCors(o => o.AddPolicy(DevCors, p => p
-    .WithOrigins("http://localhost:4200", "http://127.0.0.1:4200")
+    .WithOrigins(
+        "http://localhost:4200", "http://127.0.0.1:4200",   // angular/
+        "http://localhost:4300", "http://127.0.0.1:4300")   // react/
     .AllowAnyHeader()
     .AllowAnyMethod()));
 

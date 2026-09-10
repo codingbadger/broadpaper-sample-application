@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "broadpaper-sample-angular",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -24,7 +24,10 @@
     "@broadpaper/core": "file:../vendor/npm/broadpaper-core-0.1.0.tgz",
     "@broadpaper/blocks": "file:../vendor/npm/broadpaper-blocks-0.1.0.tgz",
     "@broadpaper/forme": "file:../vendor/npm/broadpaper-forme-0.1.0.tgz",
-    "@formepdf/core": "^0.20.0"
+    "@formepdf/core": "^0.20.0",
+    "@broadpaper/editor": "file:../vendor/npm/broadpaper-editor-0.1.0.tgz",
+    "@broadpaper/renderer": "file:../vendor/npm/broadpaper-renderer-0.1.0.tgz",
+    "@broadpaper/license": "file:../vendor/npm/broadpaper-license-0.1.0.tgz"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.27",

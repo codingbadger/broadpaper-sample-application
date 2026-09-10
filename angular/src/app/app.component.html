@@ -1,0 +1,192 @@
+<header class="bar">
+  <div class="bar__brand">
+    <strong>BroadPaper</strong>
+    <span>sample application</span>
+  </div>
+
+  @if (view() === "home") {
+    <p class="bar__description">Angular 19 · designer, viewer and PDF, against a .NET back end</p>
+  } @else {
+    <button type="button" class="bar__back" (click)="show('home')">← Overview</button>
+    <p class="bar__where">
+      <strong>{{ selected()?.name }}</strong> — {{ view() === "read" ? "read view" : "designer" }}
+    </p>
+    <div class="bar__actions">
+      @if (view() === "design") {
+        <button type="button" (click)="save()" [disabled]="busy() || !loaded()">
+          Save{{ dirty() ? " •" : "" }}
+        </button>
+      }
+      <button type="button" (click)="show(view() === 'read' ? 'design' : 'read')"
+              [disabled]="busy() || !loaded() || !template()"
+              [title]="template() ? 'The saved template as a reader would be given it' : 'Save a template first'">
+        {{ view() === "read" ? "Designer" : "Read view" }}
+      </button>
+      <button type="button" (click)="exportInBrowser()" [disabled]="busy() || !loaded()">
+        Export in the browser
+      </button>
+      <button type="button" class="primary" (click)="renderOnServer()" [disabled]="busy() || !loaded()">
+        Render on the server
+      </button>
+    </div>
+  }
+</header>
+
+<p class="status" [class]="'status--' + status().tone" role="status">{{ status().text }}</p>
+
+<main class="canvas">
+  @if (view() === "home") {
+    <div class="home">
+      <div class="home__inner">
+        <p class="home__eyebrow">
+          <span class="home__badge">Angular 19</span>
+          <span>sample application</span>
+        </p>
+
+        <h1>A report designer inside your product, and the same report as a file.</h1>
+
+        <p class="home__lede">
+          BroadPaper is an embeddable report designer. Your users lay a report out; your application owns the
+          data and the saved template; BroadPaper turns that template plus live data into a PDF — in the
+          browser, on a server, or both. The template is the only thing that crosses between the two.
+        </p>
+        <p class="home__lede">
+          This is a working application rather than a demo harness. It installs the packages the way you
+          would, and every button below does the thing it says against a real .NET back end.
+        </p>
+
+        <div class="home__flow">
+          <div class="home__node">
+            <b>Angular · :4200</b>
+            <span>This page. The designer, the read view, and PDF export in the tab.</span>
+          </div>
+          <span class="home__arrow" aria-hidden="true">→</span>
+          <div class="home__node">
+            <b>ASP.NET Core · :5170</b>
+            <span>Owns the schema, the data and the saved templates. Your application.</span>
+          </div>
+          <span class="home__arrow" aria-hidden="true">→</span>
+          <div class="home__node">
+            <b>Render service · :4780</b>
+            <span>A Node process holding the PDF engine. What .NET calls to render.</span>
+          </div>
+        </div>
+
+        <p class="home__section">1 · Pick a report</p>
+        <div class="home__reports">
+          @for (report of reports(); track report.id) {
+            <button type="button" class="home__report" [attr.aria-pressed]="report.id === selectedId()"
+                    [disabled]="busy()" (click)="choose(report.id)">
+              <b>{{ report.name }}</b>
+              <span>{{ report.description }}</span>
+            </button>
+          }
+        </div>
+
+        <p class="home__section">2 · Try each of the four things it does</p>
+        <div class="cards">
+          <div class="card">
+            <div class="card__head">
+              <h3>Design</h3>
+              <span class="card__where">in this page</span>
+            </div>
+            <p class="card__what">A fully embedded report designer.</p>
+            <p>
+              The designer your users would get, mounted as one component. Blocks on the left, the page in
+              the middle, properties on the right. It reads the schema this application declares and hands
+              back a template as JSON — it never sees your database and never calls your API. <b>Save</b> is
+              this sample <code>PUT</code>ting that JSON to .NET, which is all a save ever is.
+            </p>
+            <p class="card__action">
+              <button type="button" (click)="show('design')" [disabled]="busy() || !loaded()">Open the designer</button>
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <h3>Read view</h3>
+              <span class="card__where">in this page</span>
+            </div>
+            <p class="card__what">The saved template as an interactive page.</p>
+            <p>
+              The same saved template, rendered with live data as a read-only document you can scroll,
+              select text in and point at charts in. Same paginator as the PDF, so the page breaks are the
+              ones in the file. This is what you show somebody who needs to <em>read</em> the report rather
+              than download it — the half of the product that is not a file.
+            </p>
+            <p class="card__action">
+              <button type="button" (click)="show('read')" [disabled]="busy() || !loaded() || !template()"
+                      [title]="template() ? '' : 'Open the designer and save one first'">
+                Open the read view
+              </button>
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <h3>Export in the browser</h3>
+              <span class="card__where">no server</span>
+            </div>
+            <p class="card__what">A real PDF, drawn in this tab.</p>
+            <p>
+              The engine is Rust compiled to WebAssembly, so the file is produced here, on this machine,
+              with nothing uploaded and no server in the loop. Stop the API and the render service and this
+              still works. It is the same engine the server uses, which is why the two files agree.
+            </p>
+            <p class="card__action">
+              <button type="button" (click)="exportInBrowser()" [disabled]="busy() || !loaded()">Export a PDF here</button>
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card__head">
+              <h3>Render on the server</h3>
+              <span class="card__where">.NET</span>
+            </div>
+            <p class="card__what">The same document, produced by C#.</p>
+            <p>
+              The ASP.NET Core API loads the template it stored and asks the render service for the file.
+              No browser, no JavaScript runtime and no native PDF library on that box — the path a nightly
+              job or a webhook would take. It renders what was last <em>saved</em>, so it warns if you have
+              unsaved changes.
+            </p>
+            <p class="card__action">
+              <button type="button" class="primary" (click)="renderOnServer()" [disabled]="busy() || !loaded()">
+                Render on the server
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <p class="home__note">
+          The quickest proof the round trip is real: open the designer, rotate the page to landscape,
+          <b>Save</b>, then <b>Render on the server</b> — the file that comes back from .NET is landscape.
+          PDFs carry an evaluation watermark because no licence is configured; that is the only difference a
+          licence makes. Set <code>BROADPAPER_LICENSE</code> on the render service and it goes away.
+        </p>
+      </div>
+    </div>
+  } @else if (loaded() && view() === "read" && template()) {
+    <bp-report-viewer
+      [template]="template()!"
+      [data]="sampleData()"
+      [theme]="theme()"
+      [dataSources]="dataSources()"
+      [locale]="selected()?.locale"
+      [currency]="selected()?.currency" />
+  } @else if (loaded()) {
+    <bp-report-designer
+      [template]="template()"
+      [dataSources]="dataSources()"
+      [sampleData]="sampleData()"
+      [locale]="selected()?.locale"
+      [currency]="selected()?.currency"
+      [onExportPdf]="onExportPdf"
+      (templateChange)="onTemplateChange($event)"
+      (themeChange)="onThemeChange($event)" />
+  } @else {
+    <div class="placeholder">
+      <p>{{ status().text }}</p>
+    </div>
+  }
+</main>
