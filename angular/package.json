@@ -17,16 +17,18 @@
     "@angular/platform-browser": "^22.0.0",
     "@angular/platform-browser-dynamic": "^22.0.0",
     "@angular/router": "^22.0.0",
-    "@broadpaper/angular": "^0.1.1",
-    "@broadpaper/blocks": "^0.1.1",
-    "@broadpaper/core": "^0.1.1",
-    "@broadpaper/forme": "^0.1.1",
+    "@broadpaper/angular": "^0.4.0",
+    "@broadpaper/blocks": "^0.4.0",
+    "@broadpaper/core": "^0.4.0",
+    "@broadpaper/forme": "^0.4.0",
     "@formepdf/core": "^0.20.0",
+    "broadpaper-sample-application": "file:..",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
+    "@angular/build": "^22.0.0",
     "@angular/cli": "^22.0.0",
     "@angular/compiler-cli": "^22.0.0",
     "@types/jasmine": "~5.1.0",
@@ -36,7 +38,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~6.0.0",
-    "@angular/build": "^22.0.0"
+    "typescript": "~6.0.0"
   }
 }

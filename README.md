@@ -12,16 +12,8 @@ Pick whichever front end matches your stack:
 | **Angular** | `npm start` | http://localhost:4200 |
 | **React** | `npm run start:react` | http://localhost:4300 |
 
-They are the same application twice, deliberately. Same API, same four buttons,
-same three render paths — so the difference between them is Angular's and
-React's, and never BroadPaper's. The back end is shared rather than duplicated:
-a fix to the API is a fix for both, and two copies of it would have drifted
-inside a month.
-
-Everything here installs from **npm and nuget.org**, exactly as you would — no
-workspace, no path aliases, no local tarballs. `npm install` and
-`dotnet restore` and you have what a customer has, which is the point: if the
-packaging is wrong, this breaks. Three times already, it has.
+They are the same application twice: same API, same four buttons, same three
+render paths. Everything installs from npm and nuget.org, exactly as you would.
 
 ## What is in it
 
@@ -31,11 +23,11 @@ packaging is wrong, this breaks. Three times already, it has.
 | `react/` | React 19 on Vite. The same, in React. |
 | `api/` | ASP.NET Core on .NET 10. Owns the data contract, stores saved templates, and renders server-side through `BroadPaper.Client`. |
 | `render-service/` | `@broadpaper/server`, the render service the API is a client of. |
-| `tools/` | Builds the starter templates with `@broadpaper/core`, which is also the shortest proof it works outside a browser. |
+| `tools/` | Builds the starter templates with `@broadpaper/core`. |
 | `scripts/start.mjs` | Starts the render service, the API and one front end, and stops them together. |
 | `scripts/vendor.mjs` | Optional. Installs a *local* SDK build over the published one, for trying a change before releasing it. |
 
-Two reports are defined, in `api/data`. They share no fields and no code:
+Two reports are defined, in `api/data`:
 
 - **Account activity** — a half-year sales summary. KPIs, a bar chart against
   target, a donut by category, and a table of every order that runs onto a
@@ -45,15 +37,15 @@ Two reports are defined, in `api/data`. They share no fields and no code:
 Adding a third is a folder with a `schema.json` and a `data.json` in it, plus a
 line in `reports.json`. No C# changes.
 
-## Three processes, and why
+## Three processes
 
 The .NET client does not render PDFs. It is an HTTP client for the render
-service, which is a Node process that owns the engine — that separation is the
-whole reason a .NET application can produce these files without a browser, a
-JavaScript runtime, or a native PDF library on the server.
+service, a Node process that owns the engine — which is how a .NET application
+produces these files without a browser, a JavaScript runtime, or a native PDF
+library on the server.
 
 ```
-Angular (:4200)                                                            
+Angular (:4200)
       or          ──►  ASP.NET Core API (:5170)  ──►  render service (:4780)
 React (:4300)           templates, data,              the PDF engine
  designer, viewer,       BroadPaper.Client
@@ -65,9 +57,7 @@ WebAssembly, runs in the tab.
 
 ## Running it
 
-You need **Node 22.22.3+, 24.15+ or 26+** — the floor is the Angular 22 CLI's,
-and a version most machines will need a patch bump to reach — plus the .NET 10
-SDK. Nothing else: no BroadPaper checkout, no pnpm.
+You need **Node 22.22.3+, 24.15+ or 26+** plus the **.NET 10 SDK**.
 
 ```bash
 npm --prefix angular install   # or react, whichever you want
@@ -76,11 +66,8 @@ npm start                      # Angular, on :4200
 npm run start:react            # or React, on :4300
 ```
 
-One front end at a time. They are alternatives against the same API, and running
-both would only prove that two dev servers can hold two ports. Whichever you
-start, the render service and the .NET API come up with it.
-
-Then open the address it prints. Or run them separately, one per terminal:
+One front end at a time. Whichever you start, the render service and the .NET
+API come up with it. Or run the three separately, one per terminal:
 
 ```bash
 cd render-service && BROADPAPER_TOKEN=dev npm start
@@ -88,126 +75,21 @@ BroadPaper__Token=dev dotnet run --project api/SampleApi.csproj --urls http://12
 cd angular && npm start        # or: cd react && npm start
 ```
 
-### Trying an unreleased SDK
-
-If you are changing BroadPaper itself and want to see the change here before
-publishing it, `scripts/vendor.mjs` packs your local checkout and installs it
-over the top:
-
-```bash
-node scripts/vendor.mjs --sdk ../broadpaper    # --skip-build if you just built
-```
-
-It installs with `--no-save`, so the manifests go on naming the published
-versions and nothing you commit says otherwise. `npm install` puts the registry
-copies back. You need pnpm and a BroadPaper checkout for this, and only this.
-
-Either one opens on an **overview**: what BroadPaper is, which front end is
-running, the three processes and what each of them owns, and a card per
-capability explaining what it does before you press it. The designer is dense
-and unfamiliar the first time you meet it, and dropping somebody straight into
-it explains nothing — so it is one click away rather than the front page.
+Either front end opens on an overview: what BroadPaper is, the three processes,
+and a card per capability. The designer is one click away.
 
 ### What to try
 
-1. **Read view.** The saved template as the person it was written for would be
-   given it: no palette, no panels, and charts that answer a pointer. Same
-   paginator as the PDF, so the page breaks are the ones in the file — the half
-   of the product that is not a download.
-2. **Export in the browser.** Draws the PDF in the tab with WebAssembly. No
-   server is involved; stop the other two processes and it still works.
+1. **Read view.** The saved template as a read-only page. Same paginator as the
+   PDF, so the page breaks are the ones in the file.
+2. **Export in the browser.** Draws the PDF in the tab with WebAssembly. Stop
+   the other two processes and it still works.
 3. **Render on the server.** Asks the API for the file. It renders the template
    that was last *saved*, which is why the button warns about unsaved changes.
-4. **Change something, Save, then render on the server** — the point of the
-   whole exercise. Rotating the page to landscape and rendering is the quickest
-   proof the round trip is real.
+4. **Change something, Save, then render on the server.** Rotating the page to
+   landscape is the quickest proof the round trip is real.
 5. **Switch reports.** The invoice has an entirely different schema, and the
    designer's field pickers change with it.
 
-PDFs carry the evaluation watermark, because no licence is configured. That is
-the only difference a licence makes: set `BROADPAPER_LICENSE` on the render
-service and it goes away.
-
-## Three things this sample found, all now fixed
-
-Each of these made the packages unusable, or nearly so, from a real host
-application. All three were fixed in the SDK on 10 September 2026, and the
-workarounds this sample carried for them are gone — it now installs from npm and
-nuget.org exactly as a customer would.
-
-**`@broadpaper/angular` was not built as an Angular library.** It was bundled
-with tsup, so its `@Component` decorators were applied at runtime by a
-`__decorateClass` helper and never became Angular's Ivy definitions. There was no
-`ɵcmp` on the class, and Angular rejected the import outright:
-
-```
-TS-992012: Component imports must be standalone components, directives, pipes,
-or must be NgModules.
-```
-
-This app worked around it by pointing the import at the package's own TypeScript
-source so its Angular compiler compiled it. The package is now built with
-ng-packagr and ships partial-compiled Ivy definitions and a FESM bundle, so the
-alias and the extra file in `tsconfig.app.json` are both gone. It declares
-`@angular/core >=19`, which is the version its partial declarations were emitted
-against.
-
-**Reaching the engine pulled in a `.wasm` ES module import.** `@broadpaper/forme`
-loaded `@formepdf/core` through a dynamic `import()` on a fallback path this app
-never takes, but a bundler still had to resolve it — and the default browser
-entry is the bundler-target build, which does `import * as wasm from
-"./forme_bg.wasm"`. Angular's builder refuses that in a Zone.js application:
-
-```
-WASM/ES module integration imports are not supported with Zone.js applications
-```
-
-So this app was zoneless and aliased `@formepdf/core` to the `worker` entry.
-`@broadpaper/forme` now has a `browser` export condition whose build reaches the
-engine through `worker` itself, and the other build is absent from the browser's
-graph entirely — so the alias is gone. This app stays zoneless because that suits
-a designer running outside Angular's zone, not because it has to: it builds with
-`"polyfills": ["zone.js"]` too, which is the thing that used to be impossible.
-
-**Installing the designer downloaded 14 MB of Chromium driver.**
-`@broadpaper/editor` depended on `@broadpaper/pdf`, which depended on
-`playwright-core`, so any browser application installing the designer got a
-Chromium driver it can never run. The three browser helpers the editor actually
-wanted — print, the render-service client, `downloadBlob` — have moved to
-`@broadpaper/renderer`, and Playwright is now an optional peer of
-`@broadpaper/pdf`. Nothing here changed; `node_modules/playwright-core` simply
-stopped existing.
-
-## Things that will waste your time
-
-**Both of these are about `scripts/vendor.mjs` only.** Installing from npm, as
-everybody now does, neither can happen.
-
-**Pack after building, always.** `dist` is whatever the last build left, and
-`LICENSE`/`THIRD-PARTY-NOTICES.md` are generated into each package and
-git-ignored. Packing a stale tree gives you tarballs missing their notices and
-carrying old code, and nothing announces it — the first version of this sample
-tested a two-day-old SDK and showed PRO badges on blocks that had stopped
-carrying a tier. `vendor.mjs` builds first for that reason.
-
-**A local build at the same version can look like it did not install.** npm
-caches by name and version, so packing the same version twice and installing it
-again can serve you the first one. `vendor.mjs` clears Angular's dev-server
-cache for the same reason — it keeps its own copy of the dependency pre-bundle
-on top of npm's.
-
-**Sections go in `template.body`.** Assigning `template.sections` is plausible,
-serialises without complaint, and renders an empty document whose only clue is
-one warning: `The document has no content`.
-
-**Rich text is a structured model, not HTML.** A line break is `\n`, which
-`richTextFromTemplate` splits into paragraphs. `<br>` renders as four
-characters.
-
-**Table column widths should not total exactly 100.** That trips the engine's
-own overflow check, which clamps the last column and reports a warning. Leave a
-point of slack.
-
-**The package is `BroadPaper.Client`; the namespace is `BroadPaper`.** `using
-BroadPaper.Client;` does not compile, and the documentation's examples do not
-show a `using` at all.
+PDFs carry the evaluation watermark because no licence is configured. Set
+`BROADPAPER_LICENSE` on the render service and it goes away.

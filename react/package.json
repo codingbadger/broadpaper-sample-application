@@ -9,11 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@broadpaper/blocks": "^0.1.1",
-    "@broadpaper/core": "^0.1.1",
-    "@broadpaper/forme": "^0.1.1",
-    "@broadpaper/react": "^0.1.1",
+    "@broadpaper/blocks": "^0.4.0",
+    "@broadpaper/core": "^0.4.0",
+    "@broadpaper/forme": "^0.4.0",
+    "@broadpaper/react": "^0.4.0",
     "@formepdf/core": "^0.20.0",
+    "broadpaper-sample-application": "file:..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
