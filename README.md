@@ -1,5 +1,7 @@
 # BroadPaper sample application
 
+![Picking the invoice report, editing its heading in the designer, previewing the document, and exporting the PDF in the browser](docs/broadpaper-sample.gif)
+
 **An Angular front end, a React front end, and one .NET Core back end** using
 the BroadPaper SDK. A user designs a report in the browser, reads it as a web
 page, exports it to PDF there, saves the template to the server, and the server
