@@ -8,7 +8,8 @@
     "seed": "node seed-templates.mjs"
   },
   "dependencies": {
-    "@broadpaper/blocks": "^0.1.1",
-    "@broadpaper/core": "^0.1.1"
+    "@broadpaper/blocks": "^0.4.0",
+    "@broadpaper/core": "^0.4.0",
+    "broadpaper-sample-application": "file:.."
   }
 }

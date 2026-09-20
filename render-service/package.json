@@ -8,6 +8,7 @@
     "start": "broadpaper-server"
   },
   "dependencies": {
-    "@broadpaper/server": "^0.1.1"
+    "@broadpaper/server": "^0.4.0",
+    "broadpaper-sample-application": "file:.."
   }
 }
